@@ -42,7 +42,7 @@ variables:
 stages:
 - stage: playwrightTS
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'windows-latest'
   displayName: playwrightTS     
   jobs:   
   - job: TestExecution_${{ parameters.Environment }}
@@ -51,5 +51,6 @@ stages:
     - script: |
         curl -O https://downloads.lambdatest.com/hyperexecute/windows/hyperexecute.exe
         chmod +x hyperexecute.exe
-        ./hyperexecute.exe -u ramaswamy.shalini -k Ude2C2r1YVeVmheBAOVmyYiAnRAjivG3HZP92A2Ko8ZCWwPBTq -i lamdatest-testexecution.yaml --vars env=${{ parameters.Environment }} --vars setBaseline=${{ parameters.setBaseLineImage }}
-      displayName: 'Execute Playwright Tests'
+        echo ${{ parameters.RunFilterInput }} > ritam.txt
+        cat ritam.txt
+        ./hyperexecute.exe -u shubhamr -k dl8Y8as59i1YyGZZUeLF897aCFvIDmaKkUU1e6RgBmlgMLIIhh --config shalini.yaml.yaml
