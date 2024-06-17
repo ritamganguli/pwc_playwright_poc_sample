@@ -14,7 +14,7 @@ parameters:
   - dsdemo
 
 - name: pool
-  default: 'Lambdatest-Agents'
+  default: 'Azure Pipelines'
   
 - name: setBaseLineImage
   displayName: "Do you want to set baseline image?"
@@ -42,7 +42,7 @@ variables:
 stages:
 - stage: playwrightTS
   pool:
-    name: ${{ parameters.pool }}
+    vmImage: 'ubuntu-latest'
   displayName: playwrightTS     
   jobs:   
   - job: TestExecution_${{ parameters.Environment }}
@@ -50,4 +50,6 @@ stages:
     steps:
     - script: |
         curl -O https://downloads.lambdatest.com/hyperexecute/windows/hyperexecute.exe
+        chmod +x hyperexecute.exe
         ./hyperexecute.exe -u ramaswamy.shalini -k Ude2C2r1YVeVmheBAOVmyYiAnRAjivG3HZP92A2Ko8ZCWwPBTq -i lamdatest-testexecution.yaml --vars env=${{ parameters.Environment }} --vars setBaseline=${{ parameters.setBaseLineImage }}
+      displayName: 'Execute Playwright Tests'
