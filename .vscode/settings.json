@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "cucumber-quick": {
+        "tool": "cucumberjs",
+        "script": "npx cucumber-js src/tests/features/**/*.feature --require src/tests/steps/**/*.ts"
+} 
+}

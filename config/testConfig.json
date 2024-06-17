@@ -1,0 +1,9 @@
+{
+    "TestPlanUpdate_Project_Url": "https://dev.azure.com/anjanmondal/playwright-cucumber/",
+    "Element_Timeout": "30000",
+    "unittest": "true",
+    "passscreencapture": "true",
+    "env": "dsnightly",
+    "setBaseline": false,
+    "throwErrorOnSettingBaseline":false
+}

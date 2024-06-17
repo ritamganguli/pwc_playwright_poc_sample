@@ -1,0 +1,302 @@
+parameters:
+ 
+- name: ENVIRONMENT  
+  type: string
+
+- name: TOKEN  
+  type: string
+
+- name: TEST_POOL
+  type: string
+- name: PROJECT_ID
+  type: string
+
+- name: EMAIL
+  type: string         
+- name: CATEGORY
+  type: string
+- name: PROJECT_NAME
+  type: string      
+- name: BUILD_NUMBER
+  type: string    
+
+jobs:
+  # Send mail   
+- job: Email
+  pool: ${{ parameters.TEST_POOL }}
+  variables:
+  - name: token
+    value: $(System.AccessToken)  
+  - group: send_mail_group
+  steps:   
+  - checkout: none
+    persistCredentials: true
+      
+  - task: petergroenewegen.PeterGroenewegen-Xpirit-Vsts-Build-InlinePowershell.Xpirit-Vsts-Build-InlinePowershell.InlinePowershell@1
+    displayName: 'Send Status Mail'     
+    inputs:
+      Script: |
+              $stageStatus = New-Object -TypeName "System.Collections.ArrayList"
+              $stageStatus = [System.Collections.ArrayList]@()
+              Start-Sleep -Seconds 60
+              $stageName = New-Object -TypeName "System.Collections.ArrayList"
+              $stageName = [System.Collections.ArrayList]@()
+
+
+              $reportingColor = New-Object -TypeName "System.Collections.ArrayList"
+              $reportingColor = [System.Collections.ArrayList]@()
+
+              $passedCnt = 0
+              $failedCnt = 0
+              $blockedCnt = 0
+
+
+              $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+              $token="${{ parameters.TOKEN }}"
+              $headers.Add("Authorization", $token)
+
+
+              $response = Invoke-RestMethod "https://dev.azure.com/pwc-gx-assurance/${{parameters.PROJECT_ID}}/_apis/build/builds/$(Build.BuildId)/timeline?api-version=6.0" -Method 'GET' -Headers $headers -Body $body
+              $response | ConvertTo-Json
+              $reportPath ="https://pwc-gx-assurance.visualstudio.com/${{parameters.PROJECT_ID}}/_build/results?buildId=$(Build.BuildId)&view=results"
+              foreach ($val in $response.records)
+              {
+                if(($val.name -ne "SendMail") -and ($val.name -ne "SendMailAfterValidation"))
+                {
+                if($val.type -eq "Stage")
+                {
+                  if($val.state -eq "completed")
+                   {
+                    if($val.name.Length -ge 1){
+                        $stageName.Add($val.name)               
+                        if ($val.result -eq "succeeded"){
+                            $reportingColor.Add("Green")
+                            $stageStatus.Add("Passed")
+                            $passedCnt++
+                        }elseif ($val.result -eq "succeededWithIssues"  ){
+                            $reportingColor.Add("Maroon")
+                            $stageStatus.Add("Failed")
+                            $failedCnt++
+                        } elseif ($val.result -eq "notStarted")
+                        {
+                          $stageStatus.Add("Blocked")
+                          $reportingColor.Add("Gray")
+                          $blockedCnt++
+                        }elseif ($val.result -eq "skipped")
+                        {
+                          $stageStatus.Add("Blocked")
+                          $reportingColor.Add("Gray")
+                          $blockedCnt++
+                        }elseif ($val.result -eq "failed"){
+                            $reportingColor.Add("Maroon")
+                            $stageStatus.Add("Failed")
+                            $failedCnt++
+                        }
+                        elseif ($val.status -eq "rejected"){
+                            $reportingColor.Add("Maroon")
+                            $stageStatus.Add("Failed")
+                            $failedCnt++
+                        }
+                      }
+                    }
+                    
+                } 
+              }
+              }
+              Write-Host  "pass" $passedCnt
+              Write-Host  "blockedCnt" $blockedCnt
+
+              $totalCnt = $passedCnt + $failedCnt + $blockedCnt
+              $pipelineEmail="${{ parameters.EMAIL }}"
+              $fromemail = "ctp.1@dev.pwc.com"
+              $password = "$(email_password)"
+              if($pipelineEmail -eq "NA"){
+                $toemail= "$(playwright_ts_demo)"
+              }else{
+                $toemail=$pipelineEmail
+              }
+              #echo $(awt_mail_group)
+              Write-Host -NoNewline "Drafting email started..."
+              $smtpServer = "smtp.gmail.com"
+              $msg = new-object Net.Mail.MailMessage 
+              $smtp = new-object Net.Mail.SmtpClient($smtpServer) 
+              $smtp.Port = 587
+              $smtp.UseDefaultCredentials = $false
+              $smtp.Credentials = New-Object System.Net.NetworkCredential("$fromemail", "$password")
+              $smtp.EnableSsl = $true
+
+              #Drafting Email
+              $msg.From = "$fromemail"  
+              $msg.To.Add("$toemail")
+              $msg.BodyEncoding = [system.Text.Encoding]::Unicode 
+              $msg.SubjectEncoding = [system.Text.Encoding]::Unicode 
+              $msg.IsBodyHTML = $true
+              $reportDate = Get-Date -Format "MMM/dd/yyyy HH:mm"
+              $envValue = "${{ parameters.ENVIRONMENT }}"
+              $moduleName = "${{ parameters.CATEGORY }}"
+              $msg.Subject = "${{ parameters.PROJECT_NAME }} - $envValue $moduleName Execution Status - $reportDate" 
+
+              $stageDetails = ""
+
+              $passedCnt = 0
+              $failedCnt = 0
+              $blockedCnt = 0
+              $j = 1
+              for ($i=0; $i -lt $stageName.Count; $i++) {
+                $eName = $stageName[$i]
+                $eStatus = $stageStatus[$i]
+                $rColor = $reportingColor[$i]
+
+                Write-Host "stageName " $stageName
+                  Write-Host "stageStatus " $stageStatus
+                  $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+                  $headers.Add("Authorization", $token)
+                  $response1 = Invoke-RestMethod "https://pwc-gx-assurance.vstmr.visualstudio.com/${{parameters.PROJECT_ID}}/_apis/testresults/metrics?pipelineId=$(Build.BuildId)&stageName=$($eName)&metricNames=2&api-version=5.2-preview.1" -Method 'GET' -Headers $headers
+                  $response1 | ConvertTo-Json
+                  
+                  #if($response1.resultSummary.resultSummaryByRunState.Completed.totalTestCount -ge 0){
+                      $pCnt = $response1.resultSummary.resultSummaryByRunState.Completed.aggregatedResultDetailsByOutcome.Passed.count
+                      $fCnt = $response1.resultSummary.resultSummaryByRunState.Completed.aggregatedResultDetailsByOutcome.Failed.count
+                      $testBlockedCnt = $response1.resultSummary.resultSummaryByRunState.Aborted.aggregatedResultDetailsByOutcome.Aborted.count
+
+                        [int]$Total=[int]$response1.resultSummary.resultSummaryByRunState.Completed.totalTestCount +[int]$response1.resultSummary.resultSummaryByRunState.Aborted.totalTestCount
+                      Write-Host "Total " $Total
+                    if($Total -gt 0){
+                    
+                  
+
+                          if ($eStatus -eq "Passed"){                    
+                              $passedCnt++
+                          }elseif ($eStatus -eq "Failed"){
+                              $failedCnt++
+                          } elseif ($eStatus -eq "Blocked"){
+                              $blockedCnt++
+                          }
+
+
+                          $stageDetails += "<tr height = 30><td bgcolor = white width = 50><font face = verdana>$j</font></td><td bgcolor = white width = 250><font face = verdana>$eName</font></td><td bgcolor = white width = 100><font face = verdana>$pCnt</font></td><td bgcolor = white width = 100><font face = verdana>$fCnt</font></td><td bgcolor = white width = 100><font face = verdana>$testBlockedCnt</font></td><td bgcolor = $rColor width = 150><font face = verdana color = white>$eStatus</font></td></tr>"
+                    #}
+                    }else{
+                    if( $eStatus -eq "Blocked"){
+                              $blockedCnt++
+                    }
+                    }
+                  $j++
+              }
+              $totalCnt = $passedCnt + $failedCnt + $blockedCnt
+              
+              $cssText =
+              "<html>
+              <head>
+              <div dir=ltr >
+              <div style=font-family:georgia,serif><span>
+              <div dir= ltr  align=left  style= margin-left:pt >
+              <table style=border:none;border-collapse:collapse >
+              <colgroup><col width=25 ><col width=895 ><col width=21></colgroup>
+              <tbody>
+              <tr style=height:22pt >
+              <td rowspan=2  style=vertical-align:top;overflow:hidden >
+              <p dir=ltr  style=line-height:1.2;margin:0pt 9pt;text-align:justify ><span style= font-size:6pt;font-family:Georgia;color:rgb(255,255,255);background-color:transparent;font-weight:700;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap >c</span></p>
+              </td>
+              <td style=vertical-align:top;background-color:rgb(224,102,102);padding:7pt;overflow:hidden >
+              <p dir= ltr  style= line-height:1.2;margin-right:9pt;text-align:justify;margin-top:0pt;margin-bottom:0pt >
+              <span style= font-size:12pt;font-family:Georgia;color:rgb(255,255,255);background-color:transparent;font-weight:700;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap >NLAQD</span></p>
+              </td>
+              <td style= vertical-align:top;overflow:hidden ><br>
+              </td>
+              </tr>
+              <tr style= height:51pt >
+              <td style= vertical-align:top;background-color:rgb(224,48,30);padding:7pt;overflow:hidden >
+              <p dir= ltr  style=line-height:1.2;margin-right:9pt;text-align:justify;margin-top:0pt;margin-bottom:0pt >
+              <span style=font-size:20pt;font-family:Georgia;color:rgb(255,255,255);background-color:transparent;font-weight:700;font-style:italic;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap >NLAQD </span></p>
+              <p dir= ltr  style= line-height:1.2;margin-right:9pt;text-align:justify;margin-top:0pt;margin-bottom:0pt >
+              <span style= font-size:16pt;font-family:Georgia;color:rgb(255,255,255);background-color:transparent;font-style:italic;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap >Automation Report</span></p>
+              </td>
+              <td style= vertical-align:top;background-color:rgb(244,204,204);padding:7pt;overflow:hidden >
+              <br>
+              <br>
+              </td>
+              </tr>
+              <tr style= height:14pt >
+              <td colspan= 3  style= vertical-align:top;overflow:hidden >
+              <p dir= ltr  style= line-height:1.2;margin-right:9pt;text-align:justify;margin-top:0pt;margin-bottom:0pt >
+
+              </td>
+              </tr>
+              <tr style= height:37pt >
+              <td colspan= 2  style= border-bottom:0.996098pt solid rgb(224,48,30);vertical-align:top;padding:7pt;overflow:hidden >
+              <p dir= ltr  style= line-height:1.2;margin-right:9pt;text-align:justify;margin-top:0pt;margin-bottom:0pt >
+              <span style= font-size:18pt;font-family:Georgia;color:rgb(224,48,30);background-color:transparent;font-weight:700;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap >$reportDate</span></p>
+              </td>
+              <td style= border-bottom:0.996098pt solid rgb(224,48,30);vertical-align:top;padding:7pt;overflow:hidden >
+              <br>
+              </td>
+              </tr>
+              <td colspan=3 style=border-bottom:0.981442pt solid rgb(224,48,30);border-top:0.996098pt solid rgb(224,48,30);vertical-align:top;padding:7pt;overflow:hidden>
+              <br>
+                    <font face=georgia size=2>Hi All, <br><br>Please find the $categoryValue Confirm $envValue $moduleName Execution status below as on $reportDate. <br><br>Environment: $envValue<br>Build: ${{ parameters.BUILD_NUMBER }}<br><b>Pipeline: </b><a href='$reportPath'>$moduleName</a></font><br><br>
+                      <font face = georgia size = 2><b>Results Summary:</b></font><br><br>
+
+                      <table border=1 cellpadding=1 cellspacing=1>
+                      <tbody>
+                      <tr height = 30>
+                      <td bgcolor = royalblue width = 125 color = white><font face = georgia color=white>Total Stages</font></td>
+                      <td bgcolor = Green width = 125><font face = georgia color = white>Stages Passed</font></td>
+                      <td bgcolor = maroon width = 125><font face = georgia color = white>Stages Failed</font></td>
+                      <td bgcolor = gray width = 125><font face = georgia color = white>Stages Blocked</font></td>
+                      </tr>
+
+                      <tr height = 30>
+                      <td bgcolor = white width = 125><font face = georgia size=2>$totalCnt</font></td>
+                      <td bgcolor = white width = 125><font face = georgia size=2>$passedCnt</font></td>
+                      <td bgcolor = white width = 125><font face = georgia size=2>$failedCnt</font></td>
+                      <td bgcolor = white width = 125><font face = georgia size=2>$blockedCnt</font></td>
+                      </tr>
+                      </tbody>
+                      </table>
+                      <br><br>
+
+                      <font face = georgia size = 2><b>Results Details:</b></font><br><br>
+
+                      <table border=1 cellpadding=1 cellspacing=1>
+                      <tbody>
+                      <tr height = 30>
+                      <td bgcolor = royalblue width = 50 color = white><font face = georgia color=white>S.No</font></td>
+                      <td bgcolor = royalblue width = 250><font face = georgia color = white>Stage Name</font></td>
+                      <td bgcolor = Green width = 100><font face = georgia color = white>Passed TestCases</font></td>
+                      <td bgcolor = maroon width = 100><font face = georgia color = white>Failed TestCases</font></td>
+                      <td bgcolor = gray width = 100><font face = georgia color = white>Blocked TestCases</font></td>
+                      <td bgcolor = royalblue width = 150><font face = georgia color = white>Deployment Status</font></td>
+                      </tr>
+                      $stageDetails
+                      </tbody>
+                      </table>
+                      <br>
+                      <font face=georgia size=2><br>Regards,<br> Automation Team</font>
+
+                      <div dir=ltr align=left style=margin-left:0pt>
+                      <table style=border:none;border-collapse:collapse>
+                      <colgroup><col width=960></colgroup>
+                      <tbody>
+                      <tr style=height:22pt>
+                      <td style=vertical-align:top;background-color:rgb(224,48,30);padding:7pt;overflow:hidden>
+                      <p dir=ltr style=line-height:1.38;margin:0pt 9pt;text-align:justify><span style=font-size:12pt;font-family:Georgia;color:rgb(255,255,255);background-color:transparent;font-weight:700;font-style:italic;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap>Have</span><span style=font-size:10pt;font-family:Georgia;background-color:transparent;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap>
+                      </span><span style=font-size:12pt;font-family:Georgia;color:rgb(255,255,255);background-color:transparent;font-weight:700;font-style:italic;font-variant-numeric:normal;font-variant-east-asian:normal;vertical-align:baseline;white-space:pre-wrap>questions
+                      or feedback?</span></p></tbody>
+                       <font face=georgia size=2><br>Please reach out to us_nla_qd_automation_leads@pwc.com for any lower environmental question or concern <br>Please reach out to gbl_bao_bvt_support@pwc.com for any upper environmental question or concern</font>
+
+              </td>
+              </tr>
+              </td>        
+              </head>
+              </html>"
+
+
+              $msg.Body = $cssText
+              #Send Email            
+              $smtp.Send($msg)
+              Write-Host "Email sent successfully" -ForegroundColor Green 
+        
+      ############################
+
+  

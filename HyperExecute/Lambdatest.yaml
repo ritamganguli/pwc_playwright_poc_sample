@@ -1,0 +1,45 @@
+version: 0.1
+globalTimeout: 90
+testSuiteTimeout: 90
+testSuiteStep: 90
+retryOnFailure: false
+jobLabel: ['KYC']
+maxRetries: 1
+runson: win
+
+pre:
+  - |
+    %HYPEREXECUTE_WORKING_DIR%/HyperExecute/cert_manager.exe --pwc --chrome -i atester276.pfx
+  # - curl -k --location --request GET https://orchestrator-tcoe-project.dev.qd.pwcinternal.com/cars
+  # - powershell Invoke-WebRequest -Method GET -Uri https://orchestrator-tcoe-project.dev.qd.pwcinternal.com/cars
+
+# post:
+  # - certutil -store
+
+tunnel: true
+tunnelOpts:
+  # args: [ "--mitm", "--verbose" ]
+  args: [ "--verbose" ]
+  systemProxy: true
+  global: true
+
+skipOnError: true
+autosplit: true
+concurrency: 1
+# debug: true
+
+#testDiscovery:
+#  type: raw
+#  mode: dynamic
+#  command: |
+#     grep -lr testSuiteGuid | grep '\.[tT][sS]' | grep -E '${filter}' | sed 's/\.[tT][sS]$//g'
+
+#uploadArtefacts:
+#  - name: ExecutionReports
+#    path:
+#      - Reports\
+
+testRunnerCommand: chrome.exe --new-window https://app-d.pif-cloud.pwcinternal.com/kychub/int/ui/assessments
+
+# Run command (all credentials should be in environment variables):
+#   hyperexecute --config HyperExecute/run_test_suites_by_filter.yaml --vars filter=".*"

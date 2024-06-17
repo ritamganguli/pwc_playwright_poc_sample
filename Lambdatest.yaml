@@ -1,0 +1,61 @@
+version: 0.1
+globalTimeout: 90
+testSuiteTimeout: 90
+testSuiteStep: 90
+retryOnFailure: false
+jobLabel: ['snapshot-fw']
+maxRetries: 1
+runson: win
+ 
+pre:  
+  - npm i node-fetch@2.6.1
+  - npm i axios
+  - dotnet list $project package > packages.txt
+  # -node param.js NGAAutomation/RunSettings.runsettings url=${appUrl} appGateway=${appGateway} DBConnectionString {MongoDB}
+  - dotnet build
+  - |
+    %HYPEREXECUTE_WORKING_DIR%//Hyperexecute//cert_manager.exe --pwc --chrome -i atester298.pfx
+
+runtime:
+  language: dotnet
+  version: 6.0
+#env:
+ # NUGET_PACKAGES: 'C:\nuget_global_cache'
+ # NUGET_HTTP_CACHE_PATH: 'C:\nuget_http_cache'
+ # NUGET_PLUGINS_CACHE_PATH: 'C:\nuget_plugins_cache'
+  # PAT: ${{ .secrets.testKey }}
+# post:
+  # - certutil -store
+tunnel: true
+# tunnelOpts:
+#   args: [ "--verbose" ]
+
+skipOnError: true
+autosplit: true
+concurrency: 7
+# debug: true
+
+# testDiscovery:
+#   command: grep -E -w -R -A4 --include="*.feature.cs" "lambdatest" path tests\Interactive_UI_Elements\People_Components\Persona | grep "public void" | cut -d' ' -f2- | awk '{print $3}' | sed 's/()$//'
+#   mode: dynamic
+#   shell: bash
+#   type: raw
+#testRunnerCommand: dotnet test NGAAutomation/bin/Debug/net6.0/DesignSystemsAutomation.dll --settings "NGAAutomation/RunSettings.runsettings" --filter "FullyQualifiedName~$test"
+testRunnerCommand: npx playwright test
+  
+report: true
+partialReports:
+    type: html
+    location: custom-html-report
+    #frameworkName: extent
+    email:
+    to: 
+      - ramaswamy.shalini@pwc.com
+
+generateArtifactAfterEveryStage: true
+uploadArtifacts:
+  - name: Report
+    path:
+      - custom-html-report/**  
+
+

@@ -1,0 +1,13 @@
+
+{
+"display": "inline-flex",
+"height": "31.3333px",
+"min-width": "32px",
+"padding": "spacingVerticalNone spacingHorizontalM",
+"justify-content": "center",
+"align-items": "center",
+"font-size": "14px",
+"fontStyle":"normal",
+"line-height":"20px",
+"font-weight": "500"
+}

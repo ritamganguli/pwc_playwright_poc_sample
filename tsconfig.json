@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "strict": false,
+        "target": "es2020",
+        "module": "CommonJS",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+    }
+}

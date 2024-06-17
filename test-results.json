@@ -1,0 +1,182 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\playwright.config.ts",
+    "rootDir": "C:/Users/ritamg/Downloads/pwc-playwright/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\global-setup.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 15000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/ritamg/Downloads/pwc-playwright/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "id": "chromium:lambdatest",
+        "name": "chromium:lambdatest",
+        "testDir": "C:/Users/ritamg/Downloads/pwc-playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "version": "1.42.1",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "Interactive_UI_Elements\\People_Components\\Avatar_Group\\AvatarGroup.test.ts",
+      "file": "Interactive_UI_Elements/People_Components/Avatar_Group/AvatarGroup.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "AvatarGroupTests",
+          "file": "Interactive_UI_Elements/People_Components/Avatar_Group/AvatarGroup.test.ts",
+          "line": 12,
+          "column": 6,
+          "specs": [
+            {
+              "title": "TC1431864_AvatarGroup_Activity_ring-all_avatars_visible-spread_layout_PBI1431572",
+              "ok": false,
+              "tags": [
+                "AvatarGroup",
+                "MaverickRegression"
+              ],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium:lambdatest",
+                  "projectName": "chromium:lambdatest",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "status": "failed",
+                      "duration": 4525,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[1mMatcher error\u001b[22m: \u001b[31mreceived\u001b[39m value must be a number or bigint\n\nReceived has type:  string\nReceived has value: \u001b[31m\"1\"\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[1mMatcher error\u001b[22m: \u001b[31mreceived\u001b[39m value must be a number or bigint\n\nReceived has type:  string\nReceived has value: \u001b[31m\"1\"\u001b[39m\n    at Report.LogReport (C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Report.ts:237:30)\n    at LeftPane.GoTo (C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Wrapper.ts:328:25)\n    at C:\\Users\\ritamg\\Downloads\\pwc-playwright\\tests\\Interactive_UI_Elements\\People_Components\\Avatar_Group\\AvatarGroup.test.ts:62:9",
+                        "location": {
+                          "file": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Report.ts",
+                          "column": 30,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\src\\ReusableFunctions\\Report.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m     \u001b[36mif\u001b[39m (status\u001b[33m.\u001b[39mtoLowerCase() \u001b[33m==\u001b[39m \u001b[32m\"pass\"\u001b[39m) {\u001b[0m\n\u001b[0m \u001b[90m 236 |\u001b[39m     } \u001b[36melse\u001b[39m \u001b[36mif\u001b[39m (status\u001b[33m.\u001b[39mtoLowerCase() \u001b[33m==\u001b[39m \u001b[32m\"fail\"\u001b[39m) {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m       \u001b[36mawait\u001b[39m expect\u001b[33m.\u001b[39msoft(\u001b[32m\"1\"\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m2\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 238 |\u001b[39m       console\u001b[33m.\u001b[39mlog(newData\u001b[33m.\u001b[39mdescription)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 239 |\u001b[39m     }\u001b[0m\n\u001b[0m \u001b[90m 240 |\u001b[39m   }\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Report.ts",
+                            "column": 30,
+                            "line": 237
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[1mMatcher error\u001b[22m: \u001b[31mreceived\u001b[39m value must be a number or bigint\n\nReceived has type:  string\nReceived has value: \u001b[31m\"1\"\u001b[39m\n\n\u001b[90m   at \u001b[39m..\\src\\ReusableFunctions\\Report.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m     \u001b[36mif\u001b[39m (status\u001b[33m.\u001b[39mtoLowerCase() \u001b[33m==\u001b[39m \u001b[32m\"pass\"\u001b[39m) {\u001b[0m\n\u001b[0m \u001b[90m 236 |\u001b[39m     } \u001b[36melse\u001b[39m \u001b[36mif\u001b[39m (status\u001b[33m.\u001b[39mtoLowerCase() \u001b[33m==\u001b[39m \u001b[32m\"fail\"\u001b[39m) {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m       \u001b[36mawait\u001b[39m expect\u001b[33m.\u001b[39msoft(\u001b[32m\"1\"\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m2\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 238 |\u001b[39m       console\u001b[33m.\u001b[39mlog(newData\u001b[33m.\u001b[39mdescription)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 239 |\u001b[39m     }\u001b[0m\n\u001b[0m \u001b[90m 240 |\u001b[39m   }\u001b[0m\n\n\u001b[2m    at Report.LogReport (C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Report.ts:237:30)\u001b[22m\n\u001b[2m    at LeftPane.GoTo (C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Wrapper.ts:328:25)\u001b[22m\n\u001b[2m    at C:\\Users\\ritamg\\Downloads\\pwc-playwright\\tests\\Interactive_UI_Elements\\People_Components\\Avatar_Group\\AvatarGroup.test.ts:62:9\u001b[22m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Wrapper.ts",
+                            "column": 58,
+                            "line": 670
+                          },
+                          "message": "Error: Element button#interactive-ui-elements-people-components is not visible\n\n\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m\n\nLocator: locator('button#interactive-ui-elements-people-components')\nExpected: visible\nReceived: hidden\nCall log:\n  \u001b[2m- Element button#interactive-ui-elements-people-components is not visible with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for locator('button#interactive-ui-elements-people-components')\u001b[22m\n\n\n\u001b[90m   at \u001b[39m..\\src\\ReusableFunctions\\Wrapper.ts:670\n\n\u001b[0m \u001b[90m 668 |\u001b[39m     \u001b[36melse\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 669 |\u001b[39m       \u001b[36mawait\u001b[39m expect((\u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mfindLocator(value)\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 670 |\u001b[39m       )\u001b[33m,\u001b[39m { message\u001b[33m:\u001b[39m \u001b[32m`Element ${value} is not visible`\u001b[39m })\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m30000\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m     |\u001b[39m                                                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 671 |\u001b[39m   }\u001b[0m\n\u001b[0m \u001b[90m 672 |\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 673 |\u001b[39m   \u001b[36mpublic\u001b[39m \u001b[33mWaitForElementToBePresent\u001b[39m \u001b[33m=\u001b[39m \u001b[36masync\u001b[39m (value\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m options\u001b[33m?\u001b[39m\u001b[33m:\u001b[39m { frame\u001b[33m:\u001b[39m string }) \u001b[33m=>\u001b[39m {\u001b[0m\n\n\u001b[2m    at LeftPane.Wrapper.WaitForElementToBeVisible (C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Wrapper.ts:670:58)\u001b[22m\n\u001b[2m    at LeftPane.GoToAvatarGroup (C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\PageObjectModel\\LeftPane.page.ts:16:9)\u001b[22m\n\u001b[2m    at C:\\Users\\ritamg\\Downloads\\pwc-playwright\\tests\\Interactive_UI_Elements\\People_Components\\Avatar_Group\\AvatarGroup.test.ts:64:9\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "Started TC1431864_AvatarGroup_Activity_ring-all_avatars_visible-spread_layout_PBI1431572\n"
+                        },
+                        {
+                          "text": "Error on Opening Page  https://west-svc.ds-nightly.pwcglb.com/react-components\n"
+                        },
+                        {
+                          "text": "Finished TC1431864_AvatarGroup_Activity_ring-all_avatars_visible-spread_layout_PBI1431572 with status failed\n"
+                        },
+                        {
+                          "text": "End reopt TC1431864_AvatarGroup_Activity_ring-all_avatars_visible-spread_layout_PBI1431572\n"
+                        }
+                      ],
+                      "stderr": [
+                        {
+                          "text": "Error in LogReport: Error: ENOENT: no such file or directory, open 'C:\\Users\\ritamg\\Downloads\\pwc-playwright\\results\\testreport.json'\n\u001b[90m    at Object.writeFileSync (node:fs:2346:20)\u001b[39m\n    at Report.startReport \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39msrc\\ReusableFunctions\\Report.ts:99:10\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mtests\\Interactive_UI_Elements\\People_Components\\Avatar_Group\\AvatarGroup.test.ts:59:28\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\fixtureRunner.js:248:12\u001b[90m)\u001b[39m\n    at __PWZONE__[12]-stepZone \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:332:24\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStep \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:330:12\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:322:14\n    at TimeoutManager.withRunnable \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\timeoutManager.js:54:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStepWithRunnable \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:317:12\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:542:9\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:332:11\n    at TestInfoImpl._runAndFailOnError \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:183:7\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:329:33\n    at __PWZONE__[1]-stepZone \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:332:24\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStep \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:330:12\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:312:7\n    at TimeoutRunner.run \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright-core\u001b[24m\\lib\\utils\\timeoutRunner.js:49:14\u001b[90m)\u001b[39m\n    at TimeoutManager.runWithTimeout \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\timeoutManager.js:74:7\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:168:26\u001b[90m)\u001b[39m\n    at WorkerMain._runTest \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:289:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:213:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\common\\process.js:96:22\u001b[90m)\u001b[39m {\n  errno: \u001b[33m-4058\u001b[39m,\n  code: \u001b[32m'ENOENT'\u001b[39m,\n  syscall: \u001b[32m'open'\u001b[39m,\n  path: \u001b[32m'C:\\\\Users\\\\ritamg\\\\Downloads\\\\pwc-playwright\\\\results\\\\testreport.json'\u001b[39m\n}\n"
+                        },
+                        {
+                          "text": "Error in LogReport: Error: ENOENT: no such file or directory, open 'C:\\Users\\ritamg\\Downloads\\pwc-playwright\\results\\testreport.json'\n\u001b[90m    at Object.writeFileSync (node:fs:2346:20)\u001b[39m\n    at Report.endReport \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39msrc\\ReusableFunctions\\Report.ts:151:16\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mtests\\Interactive_UI_Elements\\People_Components\\Avatar_Group\\AvatarGroup.test.ts:73:28\n    at FixtureRunner.resolveParametersAndRunFunction \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\fixtureRunner.js:248:12\u001b[90m)\u001b[39m\n    at __PWZONE__[22]-stepZone \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:332:24\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStep \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:330:12\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:322:14\n    at TimeoutManager.withRunnable \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\timeoutManager.js:54:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStepWithRunnable \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:317:12\u001b[90m)\u001b[39m\n    at WorkerMain._runEachHooksForSuites \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:542:9\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAndFailOnError \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:183:7\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:396:34\n    at TimeoutRunner.run \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright-core\u001b[24m\\lib\\utils\\timeoutRunner.js:49:14\u001b[90m)\u001b[39m\n    at TimeoutManager.runWithTimeout \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\timeoutManager.js:74:7\u001b[90m)\u001b[39m\n    at TestInfoImpl._runWithTimeout \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:168:26\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:381:7\n    at __PWZONE__[21]-stepZone \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:332:24\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStep \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:330:12\u001b[90m)\u001b[39m\n    at \u001b[90mC:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:322:14\n    at TimeoutManager.withRunnable \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\timeoutManager.js:54:14\u001b[90m)\u001b[39m\n    at TestInfoImpl._runAsStepWithRunnable \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\testInfo.js:317:12\u001b[90m)\u001b[39m\n    at WorkerMain._runTest \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:373:5\u001b[90m)\u001b[39m\n    at WorkerMain.runTestGroup \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\worker\\workerMain.js:213:11\u001b[90m)\u001b[39m\n    at process.<anonymous> \u001b[90m(C:\\Users\\ritamg\\Downloads\\pwc-playwright\\\u001b[39mnode_modules\\\u001b[4mplaywright\u001b[24m\\lib\\common\\process.js:96:22\u001b[90m)\u001b[39m {\n  errno: \u001b[33m-4058\u001b[39m,\n  code: \u001b[32m'ENOENT'\u001b[39m,\n  syscall: \u001b[32m'open'\u001b[39m,\n  path: \u001b[32m'C:\\\\Users\\\\ritamg\\\\Downloads\\\\pwc-playwright\\\\results\\\\testreport.json'\u001b[39m\n}\n"
+                        }
+                      ],
+                      "retry": 0,
+                      "startTime": "2024-06-17T12:17:45.883Z",
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\test-results\\Interactive_UI_Elements-People_Components-Avat-c167e-ng-all-avatars-visible-spread-layout-PBI1431572-chromium-lambdatest\\trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\ritamg\\Downloads\\pwc-playwright\\src\\ReusableFunctions\\Report.ts",
+                        "column": 30,
+                        "line": 237
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "60492b81d78bc9e5329c-045ee9d385e19f119382",
+              "file": "Interactive_UI_Elements/People_Components/Avatar_Group/AvatarGroup.test.ts",
+              "line": 83,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2024-06-17T12:17:44.988Z",
+    "duration": 6483.581999999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,4 @@
+{
+    "personaUrl": "https://west-svc.ds-ci.pwcglb.com/react-components-storybook/?path=/docs/interactive-ui-elements-people-components-components-persona--docs",
+    "storyBookFrameLocator":"iframe[title=\"storybook-preview-iframe\"]"
+}

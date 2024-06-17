@@ -1,0 +1,111 @@
+version: "0.1"
+user: ramaswamy.shalini
+key: Ude2C2r1YVeVmheBAOVmyYiAnRAjivG3HZP92A2Ko8ZCWwPBTq
+testSuites: []
+pre: [npm install, npx playwright install]
+preDirectives:
+    commands: [npm install, npx playwright install]
+    maxRetries: 0
+    shell: ""
+    workingDirectory: ""
+postDirectives:
+    commands: []
+    shell: ""
+    workingDirectory: ""
+jobLabel:
+    - playwright-CodeceptJS
+    - win
+    - autosplit
+runson: win
+autosplit: true
+concurrency: 2
+testDiscovery:
+    autosubset: true
+    command: echo AvatarGroup
+    mode: dynamic
+    type: raw
+testRunnerCommand: npx playwright test -g $test
+globalTimeout: 90
+tunnelOpts:
+    testsPerTunnel: 10
+testSuiteTimeout: 90
+testSuiteStep: 90
+cacheDirectories:
+    - node_modules
+cacheKey: '{{ checksum "package-lock.json" }}'
+maxRetries: 1
+jobID: 70cefe30-3762-43d0-b57a-696111df4037
+codeDirectory: ds-qa-snapshot-fw
+framework:
+    name: ""
+    flags: []
+    discoveryFlags: []
+    discoveryType: ""
+    runnerFlags: []
+    workingDirectory: ""
+    isTestNGXMLSuite: false
+    defaultReports: false
+    args:
+        appPath: ""
+        testSuitePath: ""
+        xcTestPlanPath: ""
+        shards:
+            mappings: []
+        filters:
+            attributes: []
+        devices: []
+        deviceSelectionStrategy: ""
+        appId: ""
+        testSuiteAppId: ""
+        xcTestPlanId: ""
+        skipXMLOnRun: false
+        skipInstall: false
+        disableReleaseDevice: false
+        platformName: ""
+        isRealMobile: false
+        avoidAppLaunch: false
+        queueTimeout: 0
+        uninstallPreviousBuild: false
+        language: ""
+        locale: ""
+        preservedDevice: false
+        fixedIP: ""
+        resignApp: true
+        minorOsVersion: false
+        playwrightRD: false
+        mobileDC: null
+        skipUninstallPreviousBuild: false
+        isVirtualDevice: false
+    additional_args: null
+    licenseKey: ""
+    userdefinediscovery: false
+    toscaArgs: null
+    version: ""
+    downloadURL: ""
+    baseCommand: ""
+cypress: false
+betaFeature:
+    setPartiallyCompletedAsCompleted: false
+testType: playwright
+combineTasksInMatrixMode: false
+captureScreenRecordingForScenarios: false
+maxRetriesPreSteps: 0
+triggerMode: false
+sourcePayload:
+    verifySSL: true
+collectLocalGitData: true
+dynamicAllocation: false
+appium: false
+platformConfig: null
+differentialUpload:
+    enabled: false
+    ttlHours: null
+    forcedDisabled: false
+project:
+    id: ""
+    name: ""
+    type: default
+meta: {}
+alwaysRunPostSteps: false
+errorCategorizedOnFailureOnly: false
+storageType: ""

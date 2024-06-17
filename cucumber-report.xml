@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<testsuite failures="1" skipped="0" name="cucumber-js" time="6.461161399" tests="1">
+  <testcase classname="Playwright docs" name="check" time="6.461161399">
+    <failure/>
+    <system-out><![CDATA[Given Go to the playwright website........................................passed
+Given Open the tab.....................................................undefined]]></system-out>
+  </testcase>
+</testsuite>

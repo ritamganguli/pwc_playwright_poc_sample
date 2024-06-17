@@ -1,0 +1,143 @@
+trigger:
+- none
+
+name: Image and CSS validation in Playwright TS
+parameters:
+- name: ENV
+  displayName: ENV
+  type: string
+  values:
+    - dsci
+    - dsnightly
+
+- name: ifSetBaseline
+  displayName: Do you want to set baseline image?
+  type: string
+  values:
+    - true
+    - false
+
+- name: TEST_POOL
+  default: 'NLAQD_Pool_5'
+  values:
+  - NLAQD_Pool_5
+  - NLAQD_Pool_7
+
+- name: RunByChoice
+  displayName: Do you wish to run by tags or exact testcase titles?
+  type: string
+  values:
+    - Tag
+    - Title
+
+- name: RunFilterInput
+  displayName: Filter input to run testcases
+  type: string
+
+
+variables:
+  template_email: './templates/email_template.yml'
+  setBaseline: ${{parameters.ifSetBaseline}}
+  env: ${{parameters.ENV}}
+stages:
+ - stage: playwrightTS
+   pool:
+      name: ${{parameters.TEST_POOL}}
+   displayName:  playwrightTS     
+   jobs:   
+     - job: Setting_baseline_images_for_filtered_testcases_in_${{ parameters.ENV }} 
+       timeoutInMinutes: 180
+       steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '20.x'
+          displayName: 'Install Node.js'
+        - task: FileTransform@1
+          inputs:
+            folderPath: '$(System.DefaultWorkingDirectory)/config'
+            fileType: 'json'
+            targetFiles: '*.json'
+        - task: CmdLine@2
+          inputs:
+            script: 'type testConfig.json'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/config'  
+        - script: |
+            npm install
+          displayName: 'npm install'
+        - script: |
+            npx playwright install 
+          displayName: 'npx playwright install'
+        - task: DownloadSecureFile@1
+          name: DownloadSecureFile
+          displayName: Downloading secure file
+          inputs:
+            secureFile: '.env'    
+        - task: CopyFiles@2
+          displayName: Copy env file to repo
+          inputs:
+            SourceFolder: '$(Agent.TempDirectory)'
+            Contents: '.env'
+            TargetFolder: '$(System.DefaultWorkingDirectory)'
+        - ${{ if eq(parameters.RunByChoice, 'Tag') }}:
+          - ${{each tag in split(parameters.RunFilterInput,',')}}:
+            - script: npx playwright test -g ${{tag}}
+              displayName: Running test by tag ${{split(tag,'@')[1]}}
+              continueOnError: true
+              condition: always()
+            - task: PublishTestResults@2
+              inputs:
+                testResultsFormat: 'JUnit'
+                testResultsFiles: 'test-results.xml'
+                searchFolder: '$(System.DefaultWorkingDirectory)/playwright-report'
+              condition: always()  
+        - ${{ if eq(parameters.RunByChoice, 'Title') }}:
+          - ${{each title in split(parameters.RunFilterInput,',')}}:
+            - task: BatchScript@1
+              inputs:
+                filename: '$(System.DefaultWorkingDirectory)/batchFiles/ExecuteByExactTitle.bat'
+                arguments: '${{title}}'
+              displayName: Running test by title ${{split(title,'@')[1]}}
+              continueOnError: true
+              condition: always() 
+            - task: PublishTestResults@2
+              inputs:
+                testResultsFormat: 'JUnit'
+                testResultsFiles: 'test-results.xml'
+                searchFolder: '$(System.DefaultWorkingDirectory)/playwright-report'
+              condition: always()      
+        - publish: $(System.DefaultWorkingDirectory)/custom-html-report
+          artifact: custom-html-report
+          condition: always()
+        - task: pwc-assr-delete-files@0
+          inputs:
+            sourceFolder: '$(System.DefaultWorkingDirectory)'
+          condition: always()  
+        # - task: PublishTestResults@2
+        #   inputs:
+        #     testResultsFormat: 'JUnit'
+        #     testResultsFiles: 'test-results.xml'
+        #     searchFolder: '$(System.DefaultWorkingDirectory)/playwright-report'
+        #   condition: always()
+        # - task: publishHtml@1
+        #   inputs:
+        #     artifactName: 'html'
+        #     htmlFilePath: '$(System.DefaultWorkingDirectory)/results/index.html'
+        #   condition: always()
+# Send mail   
+ - stage: SendMail
+   variables:
+      - group: send_mail_group
+   pool:
+      name: ${{ parameters.TEST_POOL }}
+   jobs:
+      - template: ${{ variables.template_email }}
+        parameters: 
+              ENVIRONMENT: '${{parameters.ENV }}'      
+              TOKEN: $(token)
+              TEST_POOL: ${{ parameters.TEST_POOL }}
+              PROJECT_ID: 5227735c-a762-402a-8d87-90646d0cd46a
+              EMAIL: $(playwright_ts_demo)
+              CATEGORY: test
+              PROJECT_NAME: playwright-ys Demo Project
+              BUILD_NUMBER: dem0-123  
+   condition: always()  

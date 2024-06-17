@@ -1,0 +1,45 @@
+{
+  "name": "playwrightwithts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "env:qa1:debug": "cross-env environment=qa1 npx playwright test -g 'v1' --debug",
+    "env:qa1": "cross-env environment=qa1 npx playwright test -g 'w1'",
+    "env:qa2": "cross-env environment=qa2 npx playwright test -g 'v1'",
+    "env:qa1:v2": "cross-env environment=qa2 npx playwright test -g 'v2'",
+    "env:qa3": "cucumber-js --force-exit --tags @tag1 test",
+    "UploadBlob": "cross-env environment=qa2 npx playwright test -g 'Upload baseline image'",
+    "DeleteBlob": "cross-env environment=qa2 npx playwright test -g 'Delete baseline image'",
+    "RunTest": "cross-env environment=qa2 npx playwright test -g 'Anuran'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/json-diff": "^1.0.2",
+    "@types/node": "^20.8.10",
+    "cross-env": "^7.0.3",
+    "cucumber": "^6.0.7",
+    "playwright-bdd": "^5.6.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.0.0",
+    "@azure/storage-blob": "^12.17.0",
+    "@cucumber/cucumber": "^10.1.0",
+    "@playwright/test": "^1.42.1",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "dotnet": "^1.1.4",
+    "glob": "^10.3.10",
+    "json-diff": "^1.0.6",
+    "pixelmatch": "5.3.0",
+    "playwright": "^1.40.1",
+    "pngjs": "7.0.0",
+    "ts-node": "^10.9.2",
+    "undici": "^5.27.2",
+    "uuid": "^9.0.1",
+    "yargs": "^17.7.2"
+  }
+}

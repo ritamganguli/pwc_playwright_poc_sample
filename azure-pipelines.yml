@@ -1,0 +1,82 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- anjan-dev
+
+name: nodejsplaywright_Automation_$(Rev:r)
+parameters:
+- name: ENV
+  displayName: ENV
+  type: string
+  default: qa1
+
+- name: TEST_POOL
+  default: 'NLAQD_Pool_1'
+  values:
+  - NLAQD_Pool_1
+  - NLAQD_Pool_2
+
+
+variables:
+  template_email: './templates/email_template.yml'
+
+stages:
+ - stage: playwrightTS
+   pool:
+      name: NLAQD_Pool_1
+      demands: plyw
+   displayName:  playwrightTS     
+   jobs:   
+     - job: ${{ parameters.ENV }} 
+
+       steps:
+        # - task: NodeTool@0
+        #   inputs:
+        #     versionSpec: '16.x'
+        #   displayName: 'Install Node.js'
+
+        - script: |
+            npm install
+          displayName: 'npm install'
+        - script: |
+            npx playwright install 
+          displayName: 'npx playwright install'
+        - script: |           
+           npm run env:${{ parameters.ENV }}
+          displayName: 'Run Test'
+        - publish: $(System.DefaultWorkingDirectory)/custom-html-report
+          artifact: custom-html-report
+          condition: always()
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/*.xml'
+            searchFolder: '$(System.DefaultWorkingDirectory)/results/'
+          condition: always()
+        # - task: publishHtml@1
+        #   inputs:
+        #     artifactName: 'html'
+        #     htmlFilePath: '$(System.DefaultWorkingDirectory)/results/index.html'
+        #   condition: always()
+# Send mail   
+ - stage: SendMail
+   variables:
+      - group: send_mail_group
+   pool:
+      name: ${{ parameters.TEST_POOL }}
+   jobs:
+      - template: ${{ variables.template_email }}
+        parameters: 
+              ENVIRONMENT: '${{parameters.ENV }}'      
+              TOKEN: $(token)
+              TEST_POOL: ${{ parameters.TEST_POOL }}
+              PROJECT_ID: 5227735c-a762-402a-8d87-90646d0cd46a
+              EMAIL: $(playwright_ts_demo)
+              CATEGORY: test
+              PROJECT_NAME: playwright-ys Demo Project
+              BUILD_NUMBER: dem0-123  
+   condition: always()  
+            
