@@ -53,4 +53,4 @@ stages:
         chmod +x hyperexecute.exe
         echo ${{ parameters.RunFilterInput }} > ritam.txt
         cat ritam.txt
-        ./hyperexecute.exe -u shubhamr -k dl8Y8as59i1YyGZZUeLF897aCFvIDmaKkUU1e6RgBmlgMLIIhh --config shalini.yaml.yaml
+        .\hyperexecute.exe -u shubhamr -k dl8Y8as59i1YyGZZUeLF897aCFvIDmaKkUU1e6RgBmlgMLIIhh --config shalini.yaml.yaml
