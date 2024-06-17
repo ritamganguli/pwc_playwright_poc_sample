@@ -1,8 +1,7 @@
-
 trigger:
 - none
 
-name: Image and CSS validation in Playwright TS 
+name: Image and CSS validation in Playwright TS
 
 parameters:
 - name: Environment
@@ -17,7 +16,6 @@ parameters:
 - name: pool
   default: 'Lambdatest-Agents'
   
-
 - name: setBaseLineImage
   displayName: "Do you want to set baseline image?"
   type: string
@@ -38,126 +36,18 @@ parameters:
 
 variables:
   template_email: './templates/email_template.yml'
-  setBaseline: ${{parameters.setBaseLineImage}}
-  env: ${{parameters.Environment}}
+  setBaseline: ${{ parameters.setBaseLineImage }}
+  env: ${{ parameters.Environment }}
 
 stages:
- - stage: playwrightTS
-   pool:
-      name: ${{parameters.pool}}
-   displayName:  playwrightTS     
-   jobs:   
-     - job: TestExecution_${{ parameters.Environment }} 
-       timeoutInMinutes: 180
-       steps:        
-        # - task: NodeTool@0
-        #   inputs:
-        #     versionSpec: '20.x'
-        #   displayName: 'Install Node.js'
-        # - task: FileTransform@1
-        #   inputs:
-        #     folderPath: '$(System.DefaultWorkingDirectory)/config'
-        #     fileType: 'json'
-        #     targetFiles: '*.json'
-        # - task: CmdLine@2
-        #   inputs:
-        #     script: 'type testConfig.json'
-        #     workingDirectory: '$(System.DefaultWorkingDirectory)/config'
-        
-        # - script: |
-        #     npm install
-        #     displayName: 'npm install'
-        # - script: |
-        #     npx playwright install 
-        #     displayName: 'npx playwright install'
-            
-        - task: DownloadSecureFile@1
-          name: DownloadSecureFile
-          displayName: Downloading secure file
-          inputs:
-            secureFile: '.env'
-        - task: CopyFiles@2
-          displayName: Copy env file to repo
-          inputs:
-            SourceFolder: '$(Agent.TempDirectory)'
-            Contents: '.env'
-            TargetFolder: '$(System.DefaultWorkingDirectory)'      
-        - ${{ if eq(parameters.RunByChoice, 'Tag') }}:
-          - ${{each tag in split(parameters.RunFilterInput,',')}}:
-            - script: npx playwright test -g ${{tag}}
-              displayName: Running test by tag ${{split(tag,'@')[1]}}
-              continueOnError: true
-              condition: always()
-            - task: PublishTestResults@2
-              inputs:
-                testResultsFormat: 'JUnit'
-                testResultsFiles: 'test-results.xml'
-                searchFolder: '$(System.DefaultWorkingDirectory)/playwright-report'
-              condition: always()  
-        - ${{ if eq(parameters.RunByChoice, 'Title') }}:
-          - ${{each title in split(parameters.RunFilterInput,',')}}:
-            - task: BatchScript@1
-              inputs:
-                filename: '$(System.DefaultWorkingDirectory)/batchFiles/ExecuteByExactTitle.bat'
-                arguments: '${{title}}'
-              displayName: Running test by title ${{split(title,'@')[1]}}
-              continueOnError: true
-              condition: always() 
-            - task: PublishTestResults@2
-              inputs:
-                testResultsFormat: 'JUnit'
-                testResultsFiles: 'test-results.xml'
-                searchFolder: '$(System.DefaultWorkingDirectory)/playwright-report'
-              condition: always()      
-        - publish: $(System.DefaultWorkingDirectory)/custom-html-report
-          artifact: custom-html-report
-          condition: always()
-        - task: pwc-assr-delete-files@0
-          inputs:
-            sourceFolder: '$(System.DefaultWorkingDirectory)'
-          condition: always()  
-        
-    #  - job: TestExecution
-    #    timeoutInMinutes: 60
-    #    steps:
-    #           - task: pwc-assr-display-variables@0
-    #             condition: always()    
-
-        - script: |
-                      curl -O https://downloads.lambdatest.com/hyperexecute/windows/hyperexecute.exe
-                      hyperexecute.exe -u ramaswamy.shalini -k Ude2C2r1YVeVmheBAOVmyYiAnRAjivG3HZP92A2Ko8ZCWwPBTq -i lamdatest-testexecution.yaml --vars env=${{parameters.Environment}} --vars setBaseline=${{parameters.setBaseLineImage}}
-
-        # - task: PublishTestResults@2
-        #   inputs:
-        #     testResultsFormat: 'JUnit'
-        #     testResultsFiles: 'test-results.xml'
-        #     searchFolder: '$(System.DefaultWorkingDirectory)/playwright-report'
-        #   condition: always()
-        # - task: publishHtml@1
-        #   inputs:
-        #     artifactName: 'html'
-        #     htmlFilePath: '$(System.DefaultWorkingDirectory)/results/index.html'
-        #   condition: always()
-# # Send mail   
-#  - stage: SendMail
-#    variables:
-#       - group: send_mail_group
-#    pool:
-#       name: ${{ parameters.pool }}
-#    jobs:
-#     - job: TemplateJob
-#       condition: always()
-#       steps:
-#       - template: ${{ variables.template_email }}
-#         parameters: 
-#           ENVIRONMENT: '${{ parameters.Environment }}'      
-#           TOKEN: $(token)
-#           TEST_POOL: ${{ parameters.pool }}
-#           PROJECT_ID: 5227735c-a762-402a-8d87-90646d0cd46a
-#           EMAIL: $(playwright_ts_demo)
-#           CATEGORY: test
-#           PROJECT_NAME: playwright-ys Demo Project
-#           BUILD_NUMBER: dem0-123
-#         # condition: always()
-
-    
+- stage: playwrightTS
+  pool:
+    name: ${{ parameters.pool }}
+  displayName: playwrightTS     
+  jobs:   
+  - job: TestExecution_${{ parameters.Environment }}
+    timeoutInMinutes: 180
+    steps:
+    - script: |
+        curl -O https://downloads.lambdatest.com/hyperexecute/windows/hyperexecute.exe
+        ./hyperexecute.exe -u ramaswamy.shalini -k Ude2C2r1YVeVmheBAOVmyYiAnRAjivG3HZP92A2Ko8ZCWwPBTq -i lamdatest-testexecution.yaml --vars env=${{ parameters.Environment }} --vars setBaseline=${{ parameters.setBaseLineImage }}
